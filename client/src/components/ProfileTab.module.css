@@ -1,0 +1,343 @@
+.container {
+  height: 100dvh;
+  width: 100%;
+  padding: 24px 16px 100px 16px;
+  overflow-y: auto;
+  color: var(--text-primary);
+  scrollbar-width: none;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+  margin-top: 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: white;
+  color: var(--brand-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  font-family: var(--font-display);
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.header h2 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.section {
+  margin-bottom: 32px;
+}
+
+.avatarSelectSection {
+  background: var(--surface-card);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 32px;
+  border: 1px solid var(--surface-elevated);
+}
+
+.avatarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.uploadBtn {
+  background: var(--brand-secondary);
+  color: var(--text-primary);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.uploadBtn:hover {
+  opacity: 0.8;
+}
+
+.avatarGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.avatarOption {
+  font-size: 32px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-card);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.avatarOption:hover {
+  transform: scale(1.1);
+  background: var(--surface-elevated);
+}
+
+.selectedAvatar {
+  border-color: var(--brand-primary);
+  background: rgba(255, 68, 88, 0.2);
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.emptyText {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.statsText {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-top: -12px;
+  margin-bottom: 16px;
+}
+
+.trophyGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.trophyCard {
+  background: var(--surface-card);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid var(--surface-elevated);
+}
+
+.trophyIcon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.trophyTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.trophyDesc {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.likedGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.likedCard {
+  aspect-ratio: 2/3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface-card);
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.topPicksHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emptyTopPicks {
+  background: var(--surface-card);
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.topPicksGrid {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.topPickCard {
+  width: 100px;
+  height: 150px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.topPickCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.likesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.likeSelectCard {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 2/3;
+  transition: transform 0.2s;
+}
+
+.likeSelectCard:active {
+  transform: scale(0.95);
+}
+
+.likeSelectCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.selectedPick {
+  border: 2px solid var(--brand-primary);
+}
+
+.checkOverlay {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: var(--brand-primary);
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.settingsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: var(--surface-card);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--surface-elevated);
+}
+
+.settingsLabel h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.settingsLabel p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.settingsSelect {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--surface-elevated);
+  padding: 8px 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: var(--font-ui);
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--surface-elevated);
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--brand-primary);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}

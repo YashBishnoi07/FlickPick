@@ -1,0 +1,163 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  background-color: #000;
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.progressContainer {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  gap: 4px;
+  z-index: 210;
+}
+
+.progressSegment {
+  flex: 1;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: white;
+  width: 0%;
+  transform-origin: left;
+}
+
+@keyframes fillProgress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.tapAreaLeft {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30%;
+  height: 100%;
+  z-index: 205;
+}
+
+.tapAreaRight {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70%;
+  height: 100%;
+  z-index: 205;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 25px;
+  right: 15px;
+  color: white;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  z-index: 210;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  padding: 10px;
+}
+
+.pinnedDate {
+  position: absolute;
+  top: 40px;
+  left: 16px;
+  color: white;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  z-index: 210;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.2);
+  transform: rotate(-3deg);
+}
+
+.throwbackSignature {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: 'Brush Script MT', 'Cedarville Cursive', cursive;
+  font-size: 48px;
+  color: white;
+  z-index: 210;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  transform: rotate(-10deg);
+  opacity: 0.9;
+}
+
+.posterContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.vignette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.9) 100%);
+  pointer-events: none;
+}
+
+.content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 40px 24px;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  z-index: 210;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: white;
+  margin-bottom: 12px;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+  line-height: 1.1;
+}
+
+.caption {
+  font-size: 16px;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.5;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}

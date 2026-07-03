@@ -1,0 +1,116 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  background: linear-gradient(135deg, var(--brand-secondary) 0%, var(--surface-card) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 400px;
+  padding: 30px 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.wrappedContent {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, var(--brand-primary), var(--accent-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.statBox {
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.statBox h3 {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+.statBox p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.row .statBox {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.rightSwipe {
+  color: var(--brand-primary);
+}
+
+.leftSwipe {
+  color: var(--nope-blue);
+}
+
+.topGenre {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(var(--brand-primary), 0.1);
+  border: 1px solid rgba(255,68,88,0.3);
+}
+
+.topGenre p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.genreText {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: white;
+}
+
+.closeBtn {
+  background: var(--text-primary);
+  color: var(--bg-main);
+  border: none;
+  border-radius: 30px;
+  padding: 14px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  width: 100%;
+}
+
+.closeBtn:active {
+  opacity: 0.8;
+}

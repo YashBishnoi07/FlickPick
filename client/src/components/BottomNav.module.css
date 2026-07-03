@@ -1,0 +1,61 @@
+.navContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: color-mix(in srgb, var(--surface-card) 95%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--surface-elevated);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 9999;
+  padding-bottom: 20px; /* Safe area for modern phones */
+}
+
+.navBtn {
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 80px;
+  transition: all 0.2s ease;
+}
+
+.navBtn:hover {
+  color: var(--text-primary);
+}
+
+.navBtn.active {
+  color: var(--brand-primary);
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -14px;
+  background-color: #FF4458;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  border: 2px solid var(--bg-main);
+}
+
+.navBtn.active .label {
+  transform: scale(1.1);
+}

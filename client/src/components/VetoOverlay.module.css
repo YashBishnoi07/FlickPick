@@ -1,0 +1,157 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  animation: bgFlash 0.3s ease-out forwards;
+}
+
+@keyframes bgFlash {
+  0% { background-color: rgba(255, 0, 0, 0.3); }
+  100% { background-color: rgba(0, 0, 0, 0.95); }
+}
+
+.shatterContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.shard {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+  transform-origin: center;
+  animation: shatter 2s cubic-bezier(0.1, 1, 0.3, 1) forwards;
+}
+
+.shard1 { top: 20%; left: 10%; width: 60%; height: 40%; clip-path: polygon(0 0, 100% 20%, 80% 100%, 10% 80%); animation-delay: 0.1s; }
+.shard2 { top: 0%; right: 0%; width: 50%; height: 50%; clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 80%); animation-delay: 0.15s; }
+.shard3 { bottom: 0%; left: 0%; width: 50%; height: 50%; clip-path: polygon(0 20%, 100% 0, 80% 100%, 0 100%); animation-delay: 0.05s; }
+.shard4 { bottom: 10%; right: 10%; width: 60%; height: 60%; clip-path: polygon(10% 10%, 100% 0, 100% 100%, 0 100%); animation-delay: 0.2s; }
+.shard5 { top: 40%; left: 30%; width: 40%; height: 30%; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); animation-delay: 0.1s; }
+.shard6 { top: 10%; left: 40%; width: 40%; height: 60%; clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); animation-delay: 0.08s; }
+
+@keyframes shatter {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translate(var(--tx, 100px), var(--ty, 300px)) rotate(var(--rot, 45deg)) scale(0.5); opacity: 0; }
+}
+
+.shard1 { --tx: -150px; --ty: 300px; --rot: -45deg; }
+.shard2 { --tx: 200px; --ty: 200px; --rot: 60deg; }
+.shard3 { --tx: -100px; --ty: 400px; --rot: -30deg; }
+.shard4 { --tx: 150px; --ty: 350px; --rot: 80deg; }
+.shard5 { --tx: 0px; --ty: 400px; --rot: 120deg; }
+.shard6 { --tx: -50px; --ty: -200px; --rot: -90deg; }
+
+.videoContainer {
+  position: relative;
+  z-index: 10;
+  width: 80%;
+  max-width: 250px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.5), 0 10px 20px rgba(0,0,0,0.5);
+  animation: playfulPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+  transform: scale(0) rotate(-10deg);
+}
+
+.video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.vetoText {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: white;
+  text-shadow: 0 4px 20px rgba(255, 0, 0, 0.8);
+  margin: 0;
+  animation: shake 0.5s infinite;
+}
+
+@keyframes playfulPop {
+  0% { opacity: 0; transform: scale(0) rotate(-15deg); }
+  60% { opacity: 1; transform: scale(1.1) rotate(5deg); }
+  80% { transform: scale(0.95) rotate(-2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.actionOverlay {
+  position: absolute;
+  bottom: 10%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 20;
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.revengeBtn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.revengeBtn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulseRevenge {
+  0% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); }
+  50% { transform: scale(1.02); box-shadow: 0 4px 25px rgba(255, 255, 255, 0.3); }
+  100% { transform: scale(1); box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); }
+}
+
+.skipBtn {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+}

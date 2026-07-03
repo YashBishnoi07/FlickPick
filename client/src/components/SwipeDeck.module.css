@@ -1,0 +1,238 @@
+.container {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--brand-secondary);
+  overflow: hidden;
+  position: relative;
+}
+
+.statusBar {
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.partnerStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255,255,255,0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.pulseDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.pulseDot.green { background-color: #4CAF50; }
+.pulseDot.orange { background-color: #FF9800; }
+
+@keyframes pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+.deckArea {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.cardContainer {
+  position: absolute;
+  width: 85vw;
+  max-width: 380px;
+  height: 65vh;
+  max-height: 600px;
+  touch-action: none;
+  will-change: transform;
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradientOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: var(--gradient-card);
+  pointer-events: none;
+}
+
+.stamp {
+  position: absolute;
+  top: 40px;
+  padding: 8px 12px;
+  border: 4px solid;
+  border-radius: 8px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transform: rotate(-15deg);
+}
+
+.nopeStamp {
+  right: 20px;
+  color: var(--nope-blue);
+  border-color: var(--nope-blue);
+  transform: rotate(15deg);
+}
+
+.likeStamp {
+  left: 20px;
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.movieTitle {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.dot {
+  font-weight: bold;
+}
+
+.actionRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 0;
+  z-index: 20;
+}
+
+.nopeBtn, .infoBtn, .likeBtn {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.nopeBtn:active, .infoBtn:active, .likeBtn:active, .vetoBtn:active {
+  transform: scale(0.9);
+}
+
+.nopeBtn {
+  width: 52px;
+  height: 52px;
+  background-color: var(--surface-elevated);
+  color: var(--nope-blue);
+  font-size: 24px;
+}
+
+.infoBtn {
+  width: 42px;
+  height: 42px;
+  background-color: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 18px;
+}
+
+.blindOverview {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.4;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.vetoBtn {
+  width: 52px;
+  height: 52px;
+  background-color: #2b0a0a;
+  color: #ff3333;
+  font-size: 24px;
+  border: 1px solid #ff3333;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+}
+
+.vetoBtn.used {
+  opacity: 0.3;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+.likeBtn {
+  width: 64px;
+  height: 64px;
+  background-color: var(--brand-primary);
+  color: white;
+  font-size: 32px;
+  box-shadow: 0 4px 15px rgba(255,68,88,0.4);
+}
+
+.progress {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+.loadingState, .emptyState {
+  color: var(--text-secondary);
+  font-size: 18px;
+  text-align: center;
+}
+
+.popcornIcon {
+  font-size: 60px;
+  margin-bottom: 16px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

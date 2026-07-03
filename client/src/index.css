@@ -1,0 +1,73 @@
+:root {
+  --brand-primary: #FF4458;
+  --brand-secondary: #1C1C1E;
+  --surface-card: #2A2A2D;
+  --surface-elevated: #363639;
+  --accent-gold: #F5C842;
+  --nope-blue: #4A90D9;
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255,255,255,0.6);
+  --gradient-card: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.92) 100%);
+  --bg-main: #000000;
+  
+  --font-display: 'Playfair Display', serif;
+  --font-ui: 'Inter', sans-serif;
+}
+
+[data-theme="light"] {
+  --brand-secondary: #F0F0F5;
+  --surface-card: #FFFFFF;
+  --surface-elevated: #E5E5EA;
+  --text-primary: #000000;
+  --text-secondary: rgba(0,0,0,0.6);
+  --gradient-card: linear-gradient(180deg, transparent 40%, rgba(255,255,255,0.92) 100%);
+  --bg-main: #FFFFFF;
+}
+
+[data-theme="oled"] {
+  --brand-secondary: #000000;
+  --surface-card: #0A0A0A;
+  --surface-elevated: #111111;
+  --bg-main: #000000;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior-y: contain;
+  touch-action: none;
+}
+
+#root {
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: var(--brand-secondary);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+}
+
+h1, h2, h3, .display-text {
+  font-family: var(--font-display);
+}
+
+button {
+  font-family: var(--font-ui);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
