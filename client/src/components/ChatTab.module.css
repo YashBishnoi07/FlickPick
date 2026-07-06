@@ -192,6 +192,29 @@
   cursor: pointer;
 }
 
+.activeAvatarWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.themeBtn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.themeBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .avatarImage {
   width: 100%;
   height: 100%;

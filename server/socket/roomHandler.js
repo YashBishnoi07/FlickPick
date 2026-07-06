@@ -41,15 +41,6 @@ export const setupRoomHandlers = (io, socket, rooms) => {
     room.users.set(socket.id, userId || null);
     if (!room.swipes[socket.id]) {
       room.swipes[socket.id] = new Set();
-      // Recover past swipes to seamlessly restore room state across server restarts
-      if (userId) {
-        Like.find({ userId })
-          .then(likes => {
-            likes.forEach(like => room.swipes[socket.id].add(like.movieId));
-            console.log(`Recovered ${likes.length} swipes for user ${userId}`);
-          })
-          .catch(err => console.error("Error recovering likes:", err));
-      }
     }
 
     console.log(`Socket ${socket.id} joined room ${roomId}. Users in room: ${room.users.size}`);

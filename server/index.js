@@ -5,6 +5,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
 import { setupRoomHandlers } from './socket/roomHandler.js';
 import { setupChatHandlers } from './socket/chatHandler.js';
 import { getMovies, getMovieDetails } from './services/tmdb.js';
@@ -70,6 +72,18 @@ const io = new Server(server, {
     credentials: true
   }
 });
+
+if (process.env.REDIS_URL) {
+  const pubClient = createClient({ url: process.env.REDIS_URL });
+  const subClient = pubClient.duplicate();
+  
+  Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+    io.adapter(createAdapter(pubClient, subClient));
+    console.log('Redis adapter for Socket.io enabled');
+  }).catch(err => {
+    console.error('Failed to connect to Redis:', err);
+  });
+}
 
 // Use cookie parser for sockets
 io.engine.use(cookieParser());

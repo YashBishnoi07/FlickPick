@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 import styles from './Auth.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -30,8 +31,17 @@ const Auth = () => {
 
   const [successMsg, setSuccessMsg] = useState('');
   const [error, setError] = useState('');
-  const { login, register } = useContext(AuthContext);
+  const { login, register, googleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      await googleLogin(credentialResponse.credential);
+      navigate('/');
+    } catch (err) {
+      setError('Google Login failed');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -207,6 +217,16 @@ const Auth = () => {
             {isLogin ? 'Log In' : 'Sign Up'}
           </button>
         </form>
+
+        <div style={{ margin: '20px 0', display: 'flex', justifyContent: 'center', width: '100%' }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError('Google Login failed')}
+            theme="filled_black"
+            shape="pill"
+            width="100%"
+          />
+        </div>
 
         <p className={styles.switchText}>
           {isLogin ? "Don't have an account? " : "Already have an account? "}

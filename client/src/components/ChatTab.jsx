@@ -24,7 +24,15 @@ const ChatTab = () => {
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
 
-  const quickEmojis = ['😂', '😍', '😭', '🔥', '👍', '🍿', '🎬', '👻'];
+  const [bgIndex, setBgIndex] = useState(0);
+  const bgs = [
+    'var(--surface-card)',
+    'radial-gradient(circle at top right, rgba(255,68,88,0.15) 0%, var(--surface-card) 100%)',
+    'linear-gradient(to bottom, #1a1a2e, #16213e, #0f3460)',
+    'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") var(--surface-card)'
+  ];
+
+  const quickEmojis = ['😂', '😍', '😭', '🔥', '👍', '🍿', '🎬', '👻', '❤️', '👀', '✨', '🤔', '🙌', '💯', '🍕'];
 
   useEffect(() => {
     if (clearUnread) clearUnread();
@@ -154,7 +162,7 @@ const ChatTab = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ background: bgs[bgIndex] }}>
       <div className={styles.activeHeader}>
         <button className={styles.backBtn} onClick={() => setActiveChat(null)}>←</button>
         <div 
@@ -164,6 +172,9 @@ const ChatTab = () => {
           {renderAvatar(activeChat)}
         </div>
         <h2 onClick={() => setShowProfileModal(activeChat._id)}>{activeChat.username}</h2>
+        <div style={{ marginLeft: 'auto' }}>
+          <button className={styles.themeBtn} onClick={() => setBgIndex(p => (p + 1) % bgs.length)}>🎨</button>
+        </div>
       </div>
 
       <div className={styles.chatArea}>

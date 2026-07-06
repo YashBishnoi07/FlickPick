@@ -3,10 +3,13 @@ import jwt from 'jsonwebtoken';
 import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import rateLimit from 'express-rate-limit';
+import { OAuth2Client } from 'google-auth-library';
 import User from '../models/User.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -187,6 +190,47 @@ router.get('/me', protect, async (req, res) => {
     avatar: req.user.avatar,
     topPicks: req.user.topPicks,
   });
+});
+
+// Google Login
+router.post('/google-login', authLimiter, async (req, res) => {
+  try {
+    const { token } = req.body;
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { sub, name, picture } = payload; // sub is googleId
+
+    let user = await User.findOne({ googleId: sub });
+    if (!user) {
+      // Create a new user
+      const baseUsername = name.replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase();
+      let username = baseUsername;
+      let counter = 1;
+      while (await User.findOne({ username })) {
+        username = `${baseUsername}_${counter}`;
+        counter++;
+      }
+      user = await User.create({
+        username,
+        googleId: sub,
+        avatar: picture || '👤',
+      });
+    }
+
+    generateToken(res, user._id);
+    res.status(200).json({
+      _id: user._id,
+      username: user.username,
+      avatar: user.avatar,
+      topPicks: user.topPicks,
+    });
+  } catch (error) {
+    console.error("Google login error:", error);
+    res.status(401).json({ message: 'Invalid Google token' });
+  }
 });
 
 // Logout User
