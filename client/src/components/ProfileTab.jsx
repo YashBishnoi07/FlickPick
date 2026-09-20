@@ -33,20 +33,23 @@ const ProfileTab = () => {
   };
 
   // Find favorite genre based on likes
-  if (likes.length > 0) {
+  if (Array.isArray(likes) && likes.length > 0) {
     const genreCounts = {};
     likes.forEach(like => {
-      const genres = like.movieData.genre_ids || [];
+      const genres = like?.movieData?.genre_ids || [];
       genres.forEach(g => {
         genreCounts[g] = (genreCounts[g] || 0) + 1;
       });
     });
-    const topGenreId = Object.keys(genreCounts).reduce((a, b) => genreCounts[a] > genreCounts[b] ? a : b);
-    
-    // Add a trophy for having a strong genre preference if they have enough likes
-    if (genreCounts[topGenreId] >= 100) {
-      const genreName = GENRE_MAP[topGenreId] || 'Cinephile';
-      trophies.push({ id: 4, icon: '🎭', title: `${genreName} Specialist`, desc: `You really love ${genreName} movies!` });
+    const genreKeys = Object.keys(genreCounts);
+    if (genreKeys.length > 0) {
+      const topGenreId = genreKeys.reduce((a, b) => genreCounts[a] > genreCounts[b] ? a : b);
+      
+      // Add a trophy for having a strong genre preference if they have enough likes
+      if (genreCounts[topGenreId] >= 100) {
+        const genreName = GENRE_MAP[topGenreId] || 'Cinephile';
+        trophies.push({ id: 4, icon: '🎭', title: `${genreName} Specialist`, desc: `You really love ${genreName} movies!` });
+      }
     }
   }
 

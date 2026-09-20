@@ -15,6 +15,7 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/userRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import aiMatchmakerRoutes from './routes/aiMatchmaker.js';
+import spotifyRoutes from './routes/spotifyRoutes.js';
 
 import helmet from 'helmet';
 
@@ -35,7 +36,7 @@ app.use(helmet({
   contentSecurityPolicy: { 
     directives: { 
       frameAncestors: ["'self'"], 
-      frameSrc: ["'self'", "https://www.youtube.com"] 
+      frameSrc: ["'self'", "https://www.youtube.com", "https://open.spotify.com"] 
     } 
   } 
 }));
@@ -74,15 +75,22 @@ const io = new Server(server, {
 });
 
 if (process.env.REDIS_URL) {
-  const pubClient = createClient({ url: process.env.REDIS_URL });
-  const subClient = pubClient.duplicate();
-  
-  Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-    io.adapter(createAdapter(pubClient, subClient));
-    console.log('Redis adapter for Socket.io enabled');
-  }).catch(err => {
-    console.error('Failed to connect to Redis:', err);
-  });
+  try {
+    const pubClient = createClient({ url: process.env.REDIS_URL });
+    const subClient = pubClient.duplicate();
+    
+    pubClient.on('error', (err) => console.error('Redis pubClient error:', err.message));
+    subClient.on('error', (err) => console.error('Redis subClient error:', err.message));
+
+    Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+      io.adapter(createAdapter(pubClient, subClient));
+      console.log('Redis adapter for Socket.io enabled');
+    }).catch(err => {
+      console.error('Failed to connect to Redis:', err.message);
+    });
+  } catch (err) {
+    console.error('Redis setup error:', err.message);
+  }
 }
 
 // Use cookie parser for sockets
@@ -120,6 +128,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/ai-matchmaker', aiMatchmakerRoutes);
+app.use('/api/spotify', spotifyRoutes);
 
 app.get('/api/movies', async (req, res) => {
   try {

@@ -6,6 +6,7 @@ import Movie from '../models/Movie.js';
 
 let cachedFreeKey = null;
 const getApiKey = async () => {
+  if (process.env.TMDB_API_KEY) return process.env.TMDB_API_KEY;
   if (cachedFreeKey) return cachedFreeKey;
   try {
     const keys = await freekeys();
