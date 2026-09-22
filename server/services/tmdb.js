@@ -103,9 +103,12 @@ export const getMovies = async ({ services, genres, decade, runtime, page = 1, a
           httpsAgent
         });
         if (personRes.data.results && personRes.data.results.length > 0) {
-          const personId = personRes.data.results[0].id;
-          params.with_cast = personId;
-        }
+               const personId = personRes.data.results[0].id;
+               console.log('Actor lookup for:', actor, '-> personId:', personId, 'matched name:', personRes.data.results[0].name);
+                params.with_cast = personId;
+         } else {
+                console.log('Actor lookup for:', actor, '-> NO MATCH FOUND');
+           }
       } catch (err) {
         console.error('Failed to lookup actor ID:', err.message);
       }
@@ -199,7 +202,7 @@ try {
       combinedResults = [...combinedResults, ...tvShows];
     }
     
-
+    console.log('Result count:', combinedResults.length, 'Sample:', combinedResults.slice(0, 5).map(m => ({ title: m.title, lang: m.original_language, type: m.media_type })));
     combinedResults.sort(() => Math.random() - 0.5);
 
     if (combinedResults.length > 0) {
