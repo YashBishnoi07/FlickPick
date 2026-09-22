@@ -164,13 +164,24 @@ export const getMovies = async ({ services, genres, decade, runtime, page = 1, a
 
   } // End of discover filters
 
-  try {
+  // try {
 
-    const [movieRes, tvRes] = await Promise.allSettled([
-      axios.get(movieUrl, { params, timeout: 15000, httpsAgent }),
-      axios.get(tvUrl, { params, timeout: 15000, httpsAgent })
-    ]);
+  //   const [movieRes, tvRes] = await Promise.allSettled([
+  //     axios.get(movieUrl, { params, timeout: 15000, httpsAgent }),
+  //     axios.get(tvUrl, { params, timeout: 15000, httpsAgent })
+  //   ]);
+try {
 
+  const tvParams = { ...params };
+  if (tvParams.with_cast) {
+    tvParams.with_people = tvParams.with_cast;
+    delete tvParams.with_cast;
+  }
+
+  const [movieRes, tvRes] = await Promise.allSettled([
+    axios.get(movieUrl, { params, timeout: 15000, httpsAgent }),
+    axios.get(tvUrl, { params: tvParams, timeout: 15000, httpsAgent })
+  ]);
     let combinedResults = [];
 
     if (movieRes.status === 'fulfilled' && movieRes.value.data.results) {

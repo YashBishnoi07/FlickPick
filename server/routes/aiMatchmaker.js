@@ -68,6 +68,7 @@ router.post('/', protect, aiLimiter, async (req, res) => {
     text = text.replace(/```json/g, '').replace(/```/g, '').trim();
 
     const filters = JSON.parse(text);
+    console.log('AI Matchmaker filters:', filters);
     res.json(filters);
   } catch (error) {
     console.error('AI Matchmaker Error:', error);
