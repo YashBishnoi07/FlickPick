@@ -35,8 +35,8 @@ export const getMovies = async ({ services, genres, decade, runtime, page = 1, a
     return { results: MOCK_MOVIES };
   }
 
-  let movieUrl = `https://api.tmdb.org/3/discover/movie`;
-  let tvUrl = `https://api.tmdb.org/3/discover/tv`;
+  let movieUrl = `https://api.themoviedb.org/3/discover/movie`;
+  let tvUrl = `https://api.themoviedb.org/3/discover/tv`;
   
   let params = {
     api_key: apiKey,
@@ -90,15 +90,15 @@ export const getMovies = async ({ services, genres, decade, runtime, page = 1, a
 
   // If searchQuery is provided, we switch to search endpoints instead of discover
   if (searchQuery && searchQuery.trim() !== '') {
-    movieUrl = `https://api.tmdb.org/3/search/movie`;
-    tvUrl = `https://api.tmdb.org/3/search/tv`;
+    movieUrl = `https://api.themoviedb.org/3/search/movie`;
+    tvUrl = `https://api.themoviedb.org/3/search/tv`;
     params.query = searchQuery;
     // We ignore generic filters like decade, runtime, genres if there is an exact search query
   } else {
     // Standard Discover Mode
     if (actor && actor.trim() !== '') {
       try {
-        const personRes = await axios.get(`https://api.tmdb.org/3/search/person`, {
+        const personRes = await axios.get(`https://api.themoviedb.org/3/search/person`, {
           params: { api_key: apiKey, query: actor },
           httpsAgent
         });
@@ -222,7 +222,7 @@ export const getMovieDetails = async (id, type = 'movie') => {
 
   try {
     const httpsAgent = new https.Agent({ family: 4 });
-    const url = `https://api.tmdb.org/3/${type}/${id}`;
+    const url = `https://api.themoviedb.org/3/${type}/${id}`;
     const res = await axios.get(url, {
       params: {
         api_key: apiKey,
