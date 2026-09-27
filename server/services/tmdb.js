@@ -50,48 +50,15 @@ export const getMovies = async ({ services, genres, decade, runtime, page = 1, a
 
   if (language && language.trim() !== '') {
     params.with_original_language = language;
+  } else {
+    // If no specific language requested, mix Hindi and English equally!
+    params.with_original_language = 'hi|en';
   }
 
   const httpsAgent = new https.Agent({ family: 4 });
 
-  // If vibe is provided, do Vector Search from our MongoDB cache!
-  if (vibe && vibe.trim() !== '') {
-    try {
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-embedding-001" });
-      const result = await model.embedContent(vibe);
-      const queryVector = result.embedding.values;
-
-      const results = await Movie.aggregate([
-        {
-          $vectorSearch: {
-            index: 'vector_index',
-            path: 'embedding',
-            queryVector: queryVector,
-            numCandidates: 400,
-            limit: 40
-          }
-        },
-        {
-          $project: {
-            embedding: 0 // Remove heavy vector from payload
-          }
-        }
-      ]);
-
-      if (results.length > 0) {
-        // Map to expected format
-        const mapped = results.map(r => ({
-          ...r,
-          id: r.tmdbId
-        }));
-        return { results: mapped };
-      }
-    } catch (err) {
-      console.error('Vector Search failed:', err);
-      // Fallback to normal if error
-    }
-  }
+  // Removed faulty MongoDB Vector Search for `vibe` since the DB might be empty.
+  // We rely entirely on TMDB's robust filtering instead!
 
   // If searchQuery is provided, we switch to search endpoints instead of discover
   if (searchQuery && searchQuery.trim() !== '') {

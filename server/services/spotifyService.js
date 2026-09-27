@@ -83,13 +83,13 @@ export const getTrackForMovie = async ({ title, genreIds = [], year }) => {
     return null; // Gracefully signal to caller to use local fallback
   }
 
-  const searchSpotify = async (query) => {
+  const searchSpotifyForPreview = async (query) => {
     try {
       const res = await axios.get('https://api.spotify.com/v1/search', {
         params: {
           q: query,
           type: 'track',
-          limit: 3
+          limit: 15
         },
         headers: {
           'Authorization': `Bearer ${token}`
@@ -98,8 +98,12 @@ export const getTrackForMovie = async ({ title, genreIds = [], year }) => {
       });
 
       const items = res.data?.tracks?.items || [];
-      if (items.length > 0) {
-        const track = items[0];
+      // Filter for tracks that ACTUALLY have a preview_url so autoplay works
+      const tracksWithPreview = items.filter(t => t.preview_url);
+      
+      if (tracksWithPreview.length > 0) {
+        // Pick a random one from the valid ones
+        const track = tracksWithPreview[Math.floor(Math.random() * tracksWithPreview.length)];
         return {
           trackId: track.id,
           trackUri: track.uri,
@@ -107,7 +111,7 @@ export const getTrackForMovie = async ({ title, genreIds = [], year }) => {
           artist: track.artists?.map(a => a.name).join(', ') || 'Unknown Artist',
           album: track.album?.name,
           albumArt: track.album?.images?.[0]?.url || track.album?.images?.[1]?.url || null,
-          previewUrl: track.preview_url || null,
+          previewUrl: track.preview_url,
           spotifyUrl: track.external_urls?.spotify || `https://open.spotify.com/track/${track.id}`
         };
       }
@@ -117,22 +121,24 @@ export const getTrackForMovie = async ({ title, genreIds = [], year }) => {
     return null;
   };
 
-  // 1. Try exact movie soundtrack/theme search
-  let result = await searchSpotify(`${title} soundtrack`);
-  if (!result) {
-    result = await searchSpotify(`${title} theme song`);
-  }
+  // The user wants random popular music for the memory highlights, not necessarily OSTs.
+  // We'll search for random popular genres and decades to get good vibes with preview URLs!
+  const popularQueries = [
+    'genre:pop year:2015-2024',
+    'genre:dance year:2010-2024',
+    'genre:hip-hop year:2018-2024',
+    'top hits',
+    'viral hits',
+    'lofi beats',
+    'genre:indie-pop'
+  ];
+  const randomQuery = popularQueries[Math.floor(Math.random() * popularQueries.length)];
 
-  // 2. If no direct OST match found, find vibe by genre
-  if (!result && genreIds && genreIds.length > 0) {
-    const primaryGenreId = genreIds[0];
-    const vibeQuery = GENRE_VIBE_MAP[primaryGenreId] || 'cinematic movie soundtrack';
-    result = await searchSpotify(vibeQuery);
-  }
-
-  // 3. Ultimate fallback: general cinematic movie vibe
+  let result = await searchSpotifyForPreview(randomQuery);
+  
   if (!result) {
-    result = await searchSpotify('cinematic movie soundtrack');
+    // Ultimate fallback if the random query failed
+    result = await searchSpotifyForPreview('genre:pop');
   }
 
   if (result) {
