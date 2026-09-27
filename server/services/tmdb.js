@@ -27,12 +27,39 @@ const MOCK_MOVIES = [
   { id: 106, title: 'Spider-Man: No Way Home', poster_path: '/1g0dhYtq4irTY1R80vFAe85k0qJ.jpg', release_date: '2021-12-15', vote_average: 8.0, overview: 'Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero.', media_type: 'movie' }
 ];
 
-export const getMovies = async ({ services, genres, decade, runtime, page = 1, actor, searchQuery, vibe, language }) => {
+export const getMovies = async ({ services, genres, decade, runtime, page = 1, actor, searchQuery, language, exactMatches }) => {
   let apiKey = await getApiKey();
 
   if (!apiKey) {
     console.warn('TMDB_API_KEY missing and freekeys failed, using mock data.');
     return { results: MOCK_MOVIES };
+  }
+  
+  const httpsAgent = new https.Agent({ family: 4 });
+
+  // If Gemini provided exact movie recommendations (Magic Match!)
+  if (exactMatches && Array.isArray(exactMatches) && exactMatches.length > 0) {
+    const pageSize = 5; // Fetch 5 per page to allow scrolling
+    const startIndex = (page - 1) * pageSize;
+    const titlesToFetch = exactMatches.slice(startIndex, startIndex + pageSize);
+    
+    if (titlesToFetch.length === 0) return { results: [] };
+
+    try {
+      const promises = titlesToFetch.map(title => 
+        axios.get(`https://api.themoviedb.org/3/search/multi`, {
+          params: { api_key: apiKey, query: title },
+          httpsAgent
+        }).then(res => res.data.results?.[0]).catch(() => null)
+      );
+      
+      const rawResults = await Promise.all(promises);
+      const results = rawResults.filter(Boolean).map(m => ({ ...m, media_type: m.media_type || 'movie' }));
+      return { results };
+    } catch (err) {
+      console.error('Exact Matches fetch failed:', err);
+      // fallback to standard discover if it fails
+    }
   }
 
   let movieUrl = `https://api.themoviedb.org/3/discover/movie`;
@@ -51,16 +78,11 @@ export const getMovies = async ({ services, genres, decade, runtime, page = 1, a
   if (language && language.trim() !== '') {
     params.with_original_language = language;
   } else {
-    // If no specific language requested, mix Hindi and English equally!
-    params.with_original_language = 'hi|en';
+    // If no specific language requested, alternate Hindi and English per page!
+    // This guarantees a perfect 50/50 mix as the user scrolls.
+    params.with_original_language = (page % 2 === 0) ? 'hi' : 'en';
   }
 
-  const httpsAgent = new https.Agent({ family: 4 });
-
-  // Removed faulty MongoDB Vector Search for `vibe` since the DB might be empty.
-  // We rely entirely on TMDB's robust filtering instead!
-
-  // If searchQuery is provided, we switch to search endpoints instead of discover
   if (searchQuery && searchQuery.trim() !== '') {
     movieUrl = `https://api.themoviedb.org/3/search/movie`;
     tvUrl = `https://api.themoviedb.org/3/search/tv`;

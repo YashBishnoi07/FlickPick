@@ -48,6 +48,13 @@ const StoryViewer = ({ movies, onClose, onDeleteSuccess }) => {
     let isMounted = true;
     setLoadingTrack(true);
 
+    // Immediately set a local fallback song so audio starts playing IMMEDIATELY 
+    // to capture the browser's user gesture token before the async Spotify fetch completes.
+    if (!songPath && !spotifyTrack) {
+      const randomSongNum = Math.floor(Math.random() * 11) + 1;
+      setSongPath(`/song${randomSongNum}.mp3`);
+    }
+
     fetchSpotifyTrack(currentMovie).then((track) => {
       if (!isMounted) return;
       setLoadingTrack(false);
@@ -55,14 +62,6 @@ const StoryViewer = ({ movies, onClose, onDeleteSuccess }) => {
       if (track) {
         setSpotifyTrack(track);
         if (!track.previewUrl && !songPath) {
-          // If track has no preview, prep fallback audio
-          const randomSongNum = Math.floor(Math.random() * 11) + 1;
-          setSongPath(`/song${randomSongNum}.mp3`);
-        }
-      } else {
-        // Fallback to local audio
-        setSpotifyTrack(null);
-        if (!songPath) {
           const randomSongNum = Math.floor(Math.random() * 11) + 1;
           setSongPath(`/song${randomSongNum}.mp3`);
         }
@@ -170,7 +169,7 @@ const StoryViewer = ({ movies, onClose, onDeleteSuccess }) => {
         }}
       >
         {/* Background audio player (for Spotify previews or local fallback) */}
-        <audio ref={audioRef} loop style={{ display: 'none' }} />
+        <audio ref={audioRef} autoPlay loop style={{ display: 'none' }} />
         
         {/* Segmented Progress Bar */}
         <div className={styles.progressContainer}>

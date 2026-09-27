@@ -53,8 +53,8 @@ router.post('/', protect, aiLimiter, async (req, res) => {
       "runtime": "one of: 90, 120, 150. Or 'all'.",
       "actor": "if the user mentions a specific actor, actress, or director (e.g. 'Tom Cruise'), put their exact name here. Otherwise leave empty.",
       "searchQuery": "if the user mentions a specific movie franchise or exact title (e.g. 'Harry Potter', 'Avengers'), put it here. Otherwise leave empty.",
+      "exactMatches": "if the user describes a vibe, plot, mood, or asks for 'movies like X', act as a recommendation engine and provide an array of 20 exact movie titles that perfectly match this request. Example: ['Inception', 'Shutter Island', 'Memento']. Leave empty if the prompt is just generic genres.",
       "language": "if the prompt implies Indian movies, bollywood, or a specific Indian actor, put 'hi' for Hindi. Otherwise leave empty.",
-      "vibe": "if the user mentions an abstract concept, feeling, or specific plot point (e.g. 'a cozy movie about time travel', 'mind-bending thriller', 'movies where someone is trapped in a dream'), put that EXACT text here so we can do an AI semantic vector search. Otherwise leave empty."
     }${personalizationContext}
     
     User prompt: ${prompt}`;
