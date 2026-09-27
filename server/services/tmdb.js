@@ -27,7 +27,7 @@ const MOCK_MOVIES = [
   { id: 106, title: 'Spider-Man: No Way Home', poster_path: '/1g0dhYtq4irTY1R80vFAe85k0qJ.jpg', release_date: '2021-12-15', vote_average: 8.0, overview: 'Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero.', media_type: 'movie' }
 ];
 
-export const getMovies = async ({ services, genres, decade, runtime, page = 1, actor, searchQuery, vibe }) => {
+export const getMovies = async ({ services, genres, decade, runtime, page = 1, actor, searchQuery, vibe, language }) => {
   let apiKey = await getApiKey();
 
   if (!apiKey) {
@@ -41,11 +41,16 @@ export const getMovies = async ({ services, genres, decade, runtime, page = 1, a
   let params = {
     api_key: apiKey,
     language: 'en-US',
+    region: 'IN', // Default to India region for localized popularity
     sort_by: 'popularity.desc',
     include_adult: false,
     include_video: false,
     page: page,
   };
+
+  if (language && language.trim() !== '') {
+    params.with_original_language = language;
+  }
 
   const httpsAgent = new https.Agent({ family: 4 });
 

@@ -13,10 +13,10 @@ export const useTMDB = () => {
     setLoading(true);
     try {
       const targetPage = overridePage || pageRef.current;
-      const { services, genres, decade, runtime, actor, searchQuery } = filters;
+      const { services, genres, decade, runtime, actor, searchQuery, vibe, language } = filters;
       
       const response = await axios.get(`${API_URL}/api/movies`, {
-        params: { services, genres, decade, runtime, actor, searchQuery, page: targetPage }
+        params: { services, genres, decade, runtime, actor, searchQuery, vibe, language, page: targetPage }
       });
       
       const newMovies = response.data.results || [];

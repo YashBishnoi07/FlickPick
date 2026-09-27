@@ -38,7 +38,7 @@ const HighlightsRow = () => {
               movies: []
             };
           }
-          grouped[partner._id].movies.push({ ...m.movieData, matchDate: m.createdAt });
+          grouped[partner._id].movies.push({ ...m.movieData, matchDate: m.createdAt, matchId: m._id });
         });
 
         setHighlightChunks(Object.values(grouped));
@@ -95,6 +95,11 @@ const HighlightsRow = () => {
             key="story-viewer"
             movies={activeStoryGroup} 
             onClose={() => setActiveStoryGroup(null)} 
+            onDeleteSuccess={() => {
+              setActiveStoryGroup(null);
+              // Force reload
+              window.location.reload();
+            }}
           />
         )}
       </AnimatePresence>

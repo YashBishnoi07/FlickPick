@@ -64,12 +64,41 @@
   top: 25px;
   right: 15px;
   color: white;
-  background: transparent;
+  background: rgba(0,0,0,0.4);
   border: none;
   font-size: 24px;
   z-index: 210;
   text-shadow: 0 2px 10px rgba(0,0,0,0.5);
   padding: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 25px;
+  right: 65px;
+  background: rgba(255, 59, 48, 0.4);
+  border: none;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 210;
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.deleteBtn:hover {
+  background: rgba(255, 59, 48, 0.8);
 }
 
 .pinnedDate {

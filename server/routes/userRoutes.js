@@ -26,6 +26,29 @@ router.get('/matches', protect, async (req, res) => {
   }
 });
 
+// Delete a specific match
+router.delete('/matches/:id', protect, async (req, res) => {
+  try {
+    const matchId = req.params.id;
+    const userId = req.user._id;
+    
+    // Ensure the match belongs to the user
+    const match = await Match.findOne({
+      _id: matchId,
+      $or: [{ userId1: userId }, { userId2: userId }]
+    });
+
+    if (!match) {
+      return res.status(404).json({ message: 'Match not found or unauthorized' });
+    }
+
+    await Match.deleteOne({ _id: matchId });
+    res.json({ message: 'Match deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Get all right-swipes (likes) for the logged-in user
 router.get('/likes', protect, async (req, res) => {
   try {

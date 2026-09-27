@@ -6,7 +6,7 @@ import styles from './StoryViewer.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-const StoryViewer = ({ movies, onClose }) => {
+const StoryViewer = ({ movies, onClose, onDeleteSuccess }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const audioRef = useRef(null);
   const [songPath, setSongPath] = useState('');
@@ -54,9 +54,10 @@ const StoryViewer = ({ movies, onClose }) => {
 
       if (track) {
         setSpotifyTrack(track);
-        // If track has audio preview and no iframe needed, or as secondary preview
-        if (audioRef.current) {
-          audioRef.current.pause();
+        if (!track.previewUrl && !songPath) {
+          // If track has no preview, prep fallback audio
+          const randomSongNum = Math.floor(Math.random() * 11) + 1;
+          setSongPath(`/song${randomSongNum}.mp3`);
         }
       } else {
         // Fallback to local audio
@@ -78,11 +79,24 @@ const StoryViewer = ({ movies, onClose }) => {
     };
   }, [currentIndex, currentMovie]);
 
-  // Play local fallback audio when path is set and no Spotify track
+  // Play local fallback audio or Spotify preview when path is set
   useEffect(() => {
-    if (!spotifyTrack && songPath && audioRef.current) {
+    if (audioRef.current) {
       audioRef.current.volume = 0.5;
-      audioRef.current.play().catch(err => console.log("Audio autoplay prevented", err));
+      
+      let sourceToPlay = null;
+      if (spotifyTrack && spotifyTrack.previewUrl) {
+        sourceToPlay = spotifyTrack.previewUrl;
+      } else if (!spotifyTrack && songPath) {
+        sourceToPlay = songPath;
+      }
+      
+      if (sourceToPlay) {
+        audioRef.current.src = sourceToPlay;
+        audioRef.current.play().catch(err => console.log("Audio autoplay prevented", err));
+      } else {
+        audioRef.current.pause();
+      }
     }
   }, [songPath, spotifyTrack]);
 
@@ -114,6 +128,28 @@ const StoryViewer = ({ movies, onClose }) => {
     return date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
   };
 
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    if (!currentMovie || !currentMovie.matchId) return;
+    
+    if (window.confirm("Are you sure you want to delete this highlight?")) {
+      try {
+        await axios.delete(`${API_URL}/api/user/matches/${currentMovie.matchId}`, {
+          withCredentials: true // Assuming you need this if cookies are used, but typically interceptor handles it
+        });
+        if (onDeleteSuccess) {
+           onDeleteSuccess();
+        } else if (onClose) {
+           onClose();
+           window.location.reload();
+        }
+      } catch (err) {
+        console.error("Failed to delete match", err);
+        alert("Failed to delete highlight.");
+      }
+    }
+  };
+
   if (!currentMovie) return null;
 
   return createPortal(
@@ -133,8 +169,8 @@ const StoryViewer = ({ movies, onClose }) => {
           }
         }}
       >
-        {/* Local audio player fallback */}
-        {!spotifyTrack && songPath && <audio ref={audioRef} src={songPath} loop />}
+        {/* Background audio player (for Spotify previews or local fallback) */}
+        <audio ref={audioRef} loop style={{ display: 'none' }} />
         
         {/* Segmented Progress Bar */}
         <div className={styles.progressContainer}>
@@ -162,6 +198,14 @@ const StoryViewer = ({ movies, onClose }) => {
           onClick={(e) => { e.stopPropagation(); onClose(); }}
           onTouchStart={(e) => e.stopPropagation()}
         >✕</button>
+
+        {/* Delete Highlight Button */}
+        <button 
+          className={styles.deleteBtn}
+          onClick={handleDelete}
+          onTouchStart={(e) => e.stopPropagation()}
+          title="Delete Highlight"
+        >🗑️</button>
 
         {/* Date Pinned Top Left */}
         <div className={styles.pinnedDate}>
